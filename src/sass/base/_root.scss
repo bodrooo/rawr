@@ -1,0 +1,21 @@
+@use "../abstracts" as *;
+@use 'sass:map';
+
+:root {
+  --ff-primary: system-ui, sans-serif;
+
+  /* Font Size */
+  @each $step in $font-sizes {
+    $shade: map.get($step, "step") + 1 + "00";
+    $clamp: map.get($step, "clamp");
+    --fs-#{$shade}: #{$clamp};
+  }
+
+  @each $key, $value in $font-weights {
+    --fw-#{$key}: #{$value};
+  }
+
+  @each $key, $value in $colors {
+    --clr-#{$key}: #{$value};
+  }
+}

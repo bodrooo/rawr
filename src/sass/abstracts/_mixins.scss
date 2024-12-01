@@ -1,0 +1,57 @@
+@use "variables" as *;
+@use 'sass:map';
+@use 'sass:meta';
+
+// media query
+/* @mixin mq($key) { */
+/*   $size: map-get($breakpoints, $key); */
+
+/*   @if ($size) { */
+/*     @media (width > $size) { */
+/*       @content; */
+/*     } */
+/*   } */
+
+/*   @else { */
+/*     @error '`#{key}` does not exist in the $breakpoints'; */
+/*   } */
+/* } */
+
+// line clamp
+@mixin line-clamp($row-number) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $row-number;
+  overflow: hidden;
+}
+
+@mixin mq($breakpoints...) {
+  $rule: "";
+
+  @each $breakpoint in $breakpoints {
+    @if meta.type-of($breakpoint)=="map" {
+      $min: map.get($breakpoint, min-width);
+      $max: map.get($breakpoint, max-width);
+      $rule: "only screen";
+
+      @if $min !=null {
+        $rule: "#{$rule} and (min-width: #{$min})"
+      }
+
+      @if $max !=null {
+        $rule: "#{$rule} and (max-width: #{$max})"
+      }
+
+    }
+
+    @else {
+      $rule: map.get($media-queries, $breakpoint);
+    }
+  }
+
+  @if $rule !="" {
+    @media #{$rule} {
+      @content;
+    }
+  }
+}
